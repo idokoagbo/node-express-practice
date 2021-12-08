@@ -1,6 +1,18 @@
 version: '3.9'
 
 services:
+  
+  database: 
+    image: postgres:14.1-alpine
+    container_name: backend_db
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+    networks:
+      - backend
+
   app:
     depends_on:
       - database
@@ -16,15 +28,6 @@ services:
       - ${APP_PORT}:${APP_PORT}
     networks:
       - backend
-
-  database: 
-    image: postgres:14.1-alpine
-    container_name: backend_db
-    restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - database-data:/var/lib/postgresql/data/
 
 networks:
   backend:

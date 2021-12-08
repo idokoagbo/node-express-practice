@@ -1,9 +1,9 @@
 const pg = require('pg');
 const config = require('../db_config');
-// const pool = new Pool.Pool(config.config);
+const client = new pg.Pool(config.config);
 
-const client = new pg.Client(config.string);
-client.connect();
+// const client = new pg.Client(config.string);
+// client.connect();
 
 module.exports.login = function(req, res, next) {
     res.send({
