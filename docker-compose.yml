@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: backend/service:1.0.0
+    container_name: backend_test
+    restart: unless-stopped
+    volumes:
+      - ./:/usr/src/backend
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    networks:
+      - backend
+networks:
+  backend:
+    driver: bridge
+  
+volumes:
+  data: 
