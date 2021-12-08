@@ -1,6 +1,9 @@
-const Pool = require('pg').Pool;
+const pg = require('pg');
 const config = require('../db_config');
-const pool = new Pool(config);
+// const pool = new Pool.Pool(config.config);
+
+const client = new pg.Client(config.string);
+client.connect();
 
 module.exports.login = function(req, res, next) {
     res.send({
@@ -23,7 +26,7 @@ module.exports.register = function(req, res, next){
 // database tutorial functions
 
 module.exports.getUsers = function(req, res, next){
-    pool.query('SELECT * FROM users ORDER BY id ASC ',(error, results) => {
+    client.query('SELECT * FROM users ORDER BY id ASC ',(error, results) => {
 
         if(error){
             throw error;
@@ -38,7 +41,7 @@ module.exports.getUserById = function(req, res, next) {
 
     const id = parseInt(req.params.id);
     
-    pool.query('SELECT * FROM users WHERE id =$1', [id], (error, results)=> {
+    client.query('SELECT * FROM users WHERE id =$1', [id], (error, results)=> {
         if(error){
             throw error;
         }
@@ -51,7 +54,7 @@ module.exports.createUser = function(req, res, next){
     const name = req.body.name;
     const email = req.body.email;
 
-    pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (error, result) => {
+    client.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (error, result) => {
         if (error){
             throw error;
         }
@@ -67,7 +70,7 @@ module.exports.updateUser = function(req, res, next){
     const name = req.body.name;
     const email = req.body.email;
 
-    pool.query('UPDATE users SET name = $1, email = $2 WHERE id = $3', [name, email, id], (error, results)=>{
+    client.query('UPDATE users SET name = $1, email = $2 WHERE id = $3', [name, email, id], (error, results)=>{
         if(error){
             throw error;
         }
@@ -79,7 +82,7 @@ module.exports.updateUser = function(req, res, next){
 module.exports.deleteUser = function(req, res, next){
     const id = req.params.id;
 
-    pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
+    client.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
         if(error){
             throw error;
         }
