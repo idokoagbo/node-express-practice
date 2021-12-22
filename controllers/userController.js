@@ -1,17 +1,27 @@
 const pg = require('pg');
 const config = require('../db_config');
 const client = new pg.Pool(config.config);
+const twilio = require('twilio');
+const twilioClient = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 // const client = new pg.Client(config.string);
 // client.connect();
 
-module.exports.login = function(req, res, next) {
+module.exports.login = async function(req, res, next) {
+    
+    // var service = await twilioClient.verify.services.create({friendlyName: 'Sprinty', codeLength: 4});
+    var response = await twilioClient.verify.services(process.env.TWILIO_SERVICE_SID).verifications.create({to: '+12406165383', channel: 'sms'});
+
     res.send({
         data: {
             name: 'Idoko Agbo',
-            username: 'test'
+            username: 'test',
+            // services: service,
+            response: response
         }
     });
+
+    
 };
 
 module.exports.register = function(req, res, next){
