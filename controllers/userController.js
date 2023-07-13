@@ -10,7 +10,7 @@ const twilioClient = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWIL
 module.exports.login = async function(req, res, next) {
     
     // var service = await twilioClient.verify.services.create({friendlyName: 'Sprinty', codeLength: 4});
-    var response = await twilioClient.verify.services(process.env.TWILIO_SERVICE_SID).verifications.create({to: '+12406165383', channel: 'sms'});
+    var response = await twilioClient.verify.services(process.env.TWILIO_SERVICE_SID).verifications.create({to: process.env.PHONE, channel: 'sms'});
 
     res.send({
         data: {
